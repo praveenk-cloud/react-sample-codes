@@ -28,7 +28,7 @@ pipeline {
 
         success {
             emailext(
-                to: 'sankarpraveen287@gmail.com','vijay.s@doodleblue.com '
+                to: 'sankarpraveen287@gmail.com, vijay.s@doodleblue.com '
                 subject: "SUCCESS: React-Job #${env.BUILD_NUMBER}",
                 body: "React app deployed successfully. Build URL: ${env.BUILD_URL}"
             )
@@ -36,7 +36,7 @@ pipeline {
 
         failure {
             emailext(
-                to: 'sankarpraveen287@gmail.com','vijay.s@doodleblue.com'
+                to: 'sankarpraveen287@gmail.com, vijay.s@doodleblue.com'
                 subject: "FAILED: React-Job #${env.BUILD_NUMBER}",
                 body: "Pipeline failed. Check console output: ${env.BUILD_URL}"
             )
