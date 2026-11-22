@@ -12,13 +12,13 @@ pipeline {
         }
         stage('Build Docker Image') { 
             steps {
-                 sh 'docker build -t react-sample-image .'
+                 sh 'sudo docker build -t myreact .'
             } 
         }
         stage('Deploy Container') { 
             steps {
                 sh 'docker rm -f c1 || true'
-                sh 'docker run -d --name c1 -p 8081:80 react-sample-image'
+                sh 'sudo docker run -d -p 5173:5173 --name react-container myreact'
             } 
         }
     }
