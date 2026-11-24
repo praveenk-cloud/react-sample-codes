@@ -25,21 +25,37 @@ pipeline {
     }
 
     post {
-
         success {
-            emailext(
-                to: 'sankarpraveen287@gmail.com, vijay.s@doodleblue.com ',
-                subject: "SUCCESS: React-Job #${env.BUILD_NUMBER}",
-                body: "React app deployed successfully. Build URL: ${env.BUILD_URL}"
-            )
+            withCredentials([
+                string(credentialsId: 'telegrambottoken',
+                       variable: 'BOT_TOKEN'),
+                string(credentialsId: 'telegramchatid',
+                       variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                    curl -sS -X POST \
+                    "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+                    --data-urlencode "chat_id=${CHAT_ID}" \
+                    --data-urlencode "text=SUCCESS: ${JOB_NAME} Build #${BUILD_NUMBER} completed successfully. ${BUILD_URL}"
+                '''
+            }
         }
 
         failure {
-            emailext(
-                to: 'sankarpraveen287@gmail.com, vijay.s@doodleblue.com',
-                subject: "FAILED: React-Job #${env.BUILD_NUMBER}",
-                body: "Pipeline failed. Check console output: ${env.BUILD_URL}"
-            )
+            withCredentials([
+                string(credentialsId: 'telegrambottoken',
+                       variable: 'BOT_TOKEN'),
+                string(credentialsId: 'telegramchatid',
+                       variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                    curl -sS -X POST \
+                    "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+                    --data-urlencode "chat_id=${CHAT_ID}" \
+                    --data-urlencode "text=FAILURE: ${JOB_NAME} Build #${BUILD_NUMBER} failed. Check Jenkins console output. ${BUILD_URL}"
+                '''
+            }
         }
+
     }
 }
