@@ -49,8 +49,8 @@ pipeline {
                 def buildUser = 'Unknown'
 
                 wrap([$class: 'BuildUser']) {
-                    buildUser = env.BUILD_USER ?: 'Unknown'
-                }
+                buildUser = env.BUILD_USER ?: 'Unknown'
+            }
 
                 def message = """
 Jenkins Notification
