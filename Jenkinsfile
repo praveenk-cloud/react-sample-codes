@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -29,6 +30,8 @@ pipeline {
 
                 def repoName = 'react-sample-codes'
 
+                def buildNumber = env.BUILD_NUMBER
+
                 def commitId = sh(
                     script: 'git rev-parse --short HEAD',
                     returnStdout: true
@@ -44,20 +47,11 @@ pipeline {
                     returnStdout: true
                 ).trim()
 
-                def buildNumber = env.BUILD_NUMBER
-
-                def buildUser = 'Unknown'
-
-                wrap([$class: 'BuildUser']) {
-                buildUser = env.BUILD_USER ?: 'Unknown'
-            }
-
                 def message = """
 Jenkins Notification
 
 Repository: ${repoName}
 Build Number: ${buildNumber}
-Jenkins User: ${buildUser}
 Commit ID: ${commitId}
 Commit Message: ${msg}
 Commit Name: ${commitName}
